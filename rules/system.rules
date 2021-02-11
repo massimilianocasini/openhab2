@@ -1,0 +1,74 @@
+// rule "cm3panel"
+// when Item cm3panel received update
+// then
+// if (cm3panel.state == "restartX") {
+//        executeCommandLine("ssh openhab@cm3panel sudo /bin/systemctl restart startx", 5000)
+//       // mqttActions.publishMQTT("cm3panel/cm3shell","sudo startx", true)
+//        logInfo("Flag_System", "Rebooting STARTX su CM3-PANEL")
+//     }
+// if (cm3panel.state == "PowerOff") {
+//        executeCommandLine("ssh openhab@cm3panel sudo poweroff", 5000)
+//        logInfo("Flag_System", "PowerOff su CM3-PANEL")
+//     }
+// if (cm3panel.state == "Reboot") {
+//        executeCommandLine("ssh openhab@cm3panel sudo reboot", 5000)
+//        logInfo("Flag_System", "Rebooting su CM3-PANEL")
+//     }
+// end
+
+// rule "cm3home"
+// when Item cm3home received update
+// then
+// if (cm3home.state == "PowerOff") {
+//        executeCommandLine("sudo poweroff", 5000)
+//        logInfo("Flag_System", "PowerOff su CM3-HOME")
+//     }
+// if (cm3home.state == "Reboot") {
+//        executeCommandLine("sudo reboot", 5000)
+//        logInfo("Flag_System", "Rebooting su CM3-HOME")
+//     }
+// end
+
+rule "Controllo dispositivi IP"
+when 
+    Member of gIP changed
+then
+    val host = triggeringItem
+    if (host.state==ON) {
+        sendTelegram("bot1", host.name+" CONNESSO") 
+    }
+    else {
+        sendTelegram("bot1", host.name+" DISCONNESSO")
+    }
+end
+
+rule "Test termostato"
+when Time cron "0 0/1 * 1/1 * ? *"
+    then 
+        Aqara1M.postUpdate("heat")
+        Aqara1S.postUpdate(Riscaldamento_Auto_SP.state)
+        Aqara2M.postUpdate("heat")
+        Aqara2S.postUpdate(Riscaldamento_Auto_SP.state)
+        Lumi1M.postUpdate("heat")
+        Lumi1S.postUpdate(Riscaldamento_Auto_SP.state)
+end
+
+// rule "Ingresso Intesità"
+// when 
+//     Item IkeaIngressoB changed 
+// then 
+//     var IkeaIngressoB = IkeaIngressoB.state as Number
+//     IkeaLed1B.sendCommand(IkeaIngressoB)
+//     IkeaLed2B.sendCommand(IkeaIngressoB)
+
+// end
+
+// rule "Ingresso Temperatura colore"
+// when 
+//     Item IkeaIngressoCT changed
+// then 
+//     var IkeaIngressoCT = IkeaIngressoCT.state as Number
+//     IkeaLed1CT.sendCommand(IkeaIngressoCT)
+//     IkeaLed2CT.sendCommand(IkeaIngressoCT)
+// end
+

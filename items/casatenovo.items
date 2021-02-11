@@ -1,0 +1,123 @@
+Group gInfluxdb
+Group gAll
+Group gStudio (gAll)
+Group gQuadroElettrico "Quadro elettrico" <settings> (gAll)
+Group gPortone "Portone" <cellar> (gAll)
+Group gGarage "Garage" <garage> (gAll)
+Group gCameraCameretta (gAll)
+Group gCameraMatrimoniale (gAll)
+Group gCorridoio (gAll)
+Group gAntifurto (gAll)
+Group gCucina (gAll)
+Group gGiardino "Giardino" <garden> (gAll)
+Group gSalotto "Salotto" (gAll)
+Group gCm3 (gAll)
+Group gCaldaia
+Group gTemperatura
+Group gWeather
+Group gFotoVoltaico
+Group gZwave
+Group gSystemInfo
+Group gUmidita
+Group gMapDb
+
+Group:Number:AVG gAvgTemperatura "Temp.media interna [%.1f °C]" 
+Group:Switch:OR(ON, OFF) gMotion "Stato presenza [MAP(ir.map):%s]"
+
+
+Number Scena "Scena" { synonyms="Condizionatore", ga="Scene" }
+//Number Modalita
+
+//Gestione Riscaldamento
+Number Riscaldamento_Modo    "Modo riscaldamento"    <temperature>  (gMapDb)  	//Riscaldamento automatico o manuale
+Number Riscaldamento_Man_SP "SetPoint manuale [%.1f °C]" <temperature>  (gMapDb) //SetPoint manuale riscaldamento
+Number Riscaldamento_Auto_SP "SetPoint Auto [%.1f °C]" <temperature> (gMapDb)
+
+// gestione presenza
+Group:Switch:AND(OFF,ON) gPresence_Sensors <presence> // all presence sensors belong to this group
+Switch Presence "Someone is Present" <presence> // master presence switch, represents to the rest of OH where someone is home
+Switch Presence_Timer { expire="15m,command=OFF" } // anti-flapping timer
+Switch Presence_Auto <switch>  //Presenza automatica o manuale
+
+// //FGWP102 Metered Wall Plug Switch, Cucina
+// Number MeterKwh_Frigorifero_Cucina_ZW3 "Frigorifero Assorbimento totale [%.1f Wh]" <energy> (gInfluxdb) {channel="zwave:device:ba36dd41:node3:meter_kwh"}
+// Number SensorPower_Frigorifero_Cucina_ZW3 "Frigorifero Potenza impegnata [%.1f W]" <energy> (gInfluxdb) {channel="zwave:device:ba36dd41:node3:sensor_power"}
+// Switch SwitchBinary_Frigorifero_Cucina_ZW3 "Frigorifero Stato presa" <switch>     ["Switchable"] {channel="zwave:device:ba36dd41:node3:switch_binary"}
+
+//FGMS001 Motion Sensor, Studio
+Number:Temperature    FGMS001_ZW10_Temp     "Temperatura Studio[%.1f °C]"    <temperature>    (gAll, gTemperatura, gAvgTemperatura, gStudio, gInfluxdb, gZwave)    {channel="zwave:device:ba36dd41:node10:sensor_temperature"}
+Number    FGMS001_ZW10_Lum    "Luminosità [%.1f lx]"    <rgb>    (gAll, gStudio,gZwave)    {channel="zwave:device:ba36dd41:node10:sensor_luminance"}
+Switch    FGMS001_ZW10_All    "Motion[MAP(ir.map):%s]"    <motion>    (gAll, gStudio, gMotion, gPresence_Sensors,gZwave)    {channel="zwave:device:ba36dd41:node10:alarm_motion"}
+Number    FGMS001_ZW10_Batt    "Stato batteria [%d %%]"    <battery>    (gAll, gStudio, gZwave)    {channel="zwave:device:ba36dd41:node10:battery-level"}
+
+
+//Energy Driven Switch C, Condizionamento
+Switch WPS104_11_switch_binary "Switch esterno" (gAll, gQuadroElettrico) {channel="zwave:device:ba36dd41:node11:switch_binary"}
+Number SensorPower_R220P_QE_ZW11  "Sensore di potenza [%.0f]" <energy> (gAll, gQuadroElettrico) {channel="zwave:device:ba36dd41:node11:sensor_power"}
+Number:ElectricPotential MeterVoltage_R220P_QE_ZW11 "Tensione rete [%.1f V]" <energy> (gAll, gQuadroElettrico, gInfluxdb) {channel="zwave:device:ba36dd41:node11:meter_voltage"}
+Number MeterPowerFactor_R220P_QE_ZW11 "Sfasamento rete [%.0f φ]" <energy> (gAll, gQuadroElettrico, gInfluxdb) {channel="zwave:device:ba36dd41:node11:meter_powerfactor"}
+Number:ElectricCurrent MeterCurrent_R220P_QE_ZW11 "Corrente assorbita [%.1f A]" <energy> (gAll, gQuadroElettrico, gInfluxdb) {channel="zwave:device:ba36dd41:node11:meter_current"}
+Number:Power MeterWatts_R220P_QE_ZW11 "Assorbita [%.0f W]" <fan> (gAll, gQuadroElettrico, gInfluxdb) {channel="zwave:device:ba36dd41:node11:meter_watts"}
+Number:Energy MeterKwh_R220P_QE_ZW11 "Energia consumata [%.1f kWh]" <fan> (gAll, gQuadroElettrico, gInfluxdb) {channel="zwave:device:ba36dd41:node11:meter_kwh"}
+String WPS104_tensione_potenza "Temp Aussen [%s]" 
+
+//FGS222 Double relay Switch 2x1.5kW, Portone
+Switch FGS222_13_switch_binary "Binary" (gAll, gPortone) {channel="zwave:device:ba36dd41:node13:switch_binary"}
+Switch SwitchBinary1_Luce_Portone_ZW13 "Luce Portone" <light> (gAll, gPortone)  { ga="Light" [roomHint="Portone"], channel="zwave:device:ba36dd41:node13:switch_binary1"}
+Switch SwitchBinary2_Luce_CancellettoEst_ZW13 "Luce Cancelletto" <light> (gAll, gPortone) {channel="zwave:device:ba36dd41:node13:switch_binary2"}
+
+//FGS222 Double relay Switch 2x1.5kW, Garage
+Switch FGS222_15_switch_binary "" (gAll, gGarage) {channel="zwave:device:ba36dd41:node15:switch_binary"}
+Switch SwitchBinary1_Serranda_Garage_ZW15 "Apri Serranda Garage" <blinds> (gAll, gGarage)  { ga="Switch" [roomHint="Garage"], channel="zwave:device:ba36dd41:node15:switch_binary1"} 
+Switch SwitchBinary2_Luce_Garage_ZW15 "Luce Garage" <light> (gAll, gGarage)  { ga="Light" [roomHint="Garage"], channel="zwave:device:ba36dd41:node15:switch_binary2", expire="3600s,command=OFF"}
+ 
+//FGBS001 Universal Binary Sensor, Garage 
+Number  FGBS001_16_scene_number "Scene" (gAll, gGarage) {channel="zwave:device:ba36dd41:node16:scene_number"}
+Switch  FGBS001_16_SensorBinary1    "Stato serranda [MAP(serrande.map):%s]"    <blinds>    (gAll, gGarage)    {channel="zwave:device:ba36dd41:node16:sensor_binary1"}
+Switch  FGBS001_16_alarm_general1 "Alarm1" (gAll) {channel="zwave:device:ba36dd41:node16:alarm_general1"}
+Switch  FGBS001_16_SensorBinary2    "IR [MAP(ir.map):%s]"    <motion>    (gAll, gGarage)    {channel="zwave:device:ba36dd41:node16:sensor_binary2"}
+Switch  FGBS001_16_alarm_general2 "Alarm2" (gAll) {channel="zwave:device:ba36dd41:node16:alarm_general2"}
+Number  FGBS001_16_SensorTemperature3    "Garage Temperatura [%.1f °C]"    <temperature>    (gAll, gTemperatura, gGarage, gInfluxdb)    {channel="zwave:device:ba36dd41:node16:sensor_temperature3"}
+
+//FGBS001 Universal Binary Sensor, Camera Cameretta
+Number FGBS001_17_scene_number "" (gAll) {channel="zwave:device:ba36dd41:node17:scene_number"}
+Switch SensorBinary1_IRMotion_Cameretta_ZW17 "Cameretta[MAP(ir.map):%s]" <motion> (gAll, gCameraCameretta, gMotion, gPresence_Sensors) {channel="zwave:device:ba36dd41:node17:sensor_binary1"}
+Switch FGBS001_17_alarm_general1 "" {channel="zwave:device:ba36dd41:node17:alarm_general1"}
+Switch SensorBinary2_IRTamper_Cameretta_ZW17 "Tamper [MAP(tamper.map):%s]" <shield> (gAll, gCameraCameretta) {channel="zwave:device:ba36dd41:node17:sensor_binary2"}
+Switch FGBS001_17_alarm_general2 "" {channel="zwave:device:ba36dd41:node17:alarm_general2"}
+Number SensorTemperature3_DS1820_Cameretta_ZW17 "Cameretta Temperatura [%.1f °C]" <temperature> {channel="zwave:device:ba36dd41:node17:sensor_temperature3"}
+Number OffSetTemperature3_DS1820_Cameretta_ZW17 "Cameretta Temperatura [%.1f °C]" <temperature> (gAll, gTemperatura, gCameraCameretta, gInfluxd)  
+
+//FGS222 Double relay Switch 2x1.5kW, Camera Cameretta porta
+Switch FGS222_18_switch_binary "" (gAll) {channel="zwave:device:ba36dd41:node18:switch_binary"}
+Switch SwitchBinary1_LuceLatoPorta_Cameretta_ZW18 "Luce Cameretta" <light> (gAll, gCameraCameretta)  {ga="Light" [roomHint="Cameretta"], channel="zwave:device:ba36dd41:node18:switch_binary1"}
+Switch SwitchBinary2_LumettiLatoPorta_Cameretta_ZW18 "Lumetti Cameretta" <light> (gAll, gCameraCameretta) { ga="Light" [roomHint="Cameretta"],channel="zwave:device:ba36dd41:node18:switch_binary2"}
+
+//FGS222 Double relay Switch 2x1.5kW Camera Cameretta lumetti
+Switch FGS222_19_switch_binary "" (gAll) {channel="zwave:device:ba36dd41:node19:switch_binary"}
+Switch SwitchBinary1_LuceLatoLetti_Cameretta_ZW19 "Luce Cameretta" (gAll, gCameraCameretta) {channel="zwave:device:ba36dd41:node19:switch_binary1"}
+Switch SwitchBinary2_LumettiLatoLetti_Cameretta_ZW19 "Lumetti Caneretta " (gAll, gCameraCameretta) {channel="zwave:device:ba36dd41:node19:switch_binary2"}
+
+//FGD211 Universal Dimmer 500W, Corridoio
+Dimmer    FGD211_ZW20_Dimmer    "Luce Corridoio [%d %%]"    <light>    (gAll, gCorridoio)    {ga="Light" [roomHint="Corridoio"], channel="zwave:device:ba36dd41:node20:switch_dimmer"}
+
+
+//FGRM223 Roller Shutter, Pergotenda
+Rollershutter BlindsControl_Pergotenda_Giardino_ZW24 "Pergotenda [%d %%]" <rollershutter> (gAll, gGiardino) { ga="Awning" [roomHint="Giardino"],channel="zwave:device:ba36dd41:node24:blinds_control1"}
+Number:Power MeterWatts_Pergotenda_Giardino_ZW24  "Potenza istantanea" (gAll, gGiardino) {channel="zwave:device:ba36dd41:node24:meter_watts1"}
+Number:Energy MeterKwh_Pergotenda_Giardino_ZW24  "Energia consumata" (gAll, gGiardino) {channel="zwave:device:ba36dd41:node24:meter_kwh1"}
+
+//FGS221 Double Relay Switch 2x1.5kW, Soggiorno
+Switch FGS221_22_switch_binary ""  (gAll) {channel="zwave:device:ba36dd41:node22:switch_binary"}
+Switch SwitchBinary1_AlberoNatale_Salotto_ZW22 "Albero di Natale" (gAll, gSalotto) { ga="Outlet" [roomHint="Soggiorno"], channel="zwave:device:ba36dd41:node22:switch_binary1"}
+Switch SwitchBinary2_TV_Salotto_ZW22 "TV, Ampli" <cinema> (gAll, gSalotto) { ga="Outlet",channel="zwave:device:ba36dd41:node22:switch_binary2"}
+
+//FGS221 Double Relay Switch 2x1.5kW, Caldaia consenso
+Switch FGS221_23_switch_binary ""  (gAll) {channel="zwave:device:ba36dd41:node23:switch_binary"}
+Switch FGS221_23_switch_binary1 "Libero" <climate> (gAll, gCaldaia) {channel="zwave:device:ba36dd41:node23:switch_binary1"}
+Switch SwitchBinary2_Caldaia_Tecnico_ZW22 "Caldaia [MAP(caldaia.map):%s]" <fire> (gAll, gCaldaia) { ga="Outlet" [roomHint="Caldaia"], channel="zwave:device:ba36dd41:node23:switch_binary2"}
+
+//FGS222 FGBS222 Smart Implant, IR Corridoio
+Number    FGS222_25_sensor_temperature    "Temperatura corridoio [%.1f °C]"    <temperature>    (gAll)    {channel="zwave:device:ba36dd41:node25:sensor_temperature"}
+Switch    FGS222_25_input1    "IR Tamper [MAP(tamper.map):%s]"    <shield>    (gAll)    {channel="zwave:device:ba36dd41:node25:alarm_burglar1"}
+Switch    FGS222_25_input2    "IR [MAP(ir.map):%s]"    <motion>    (gAll)    {channel="zwave:device:ba36dd41:node25:alarm_burglar2"}

@@ -1,0 +1,32 @@
+//https://www.freeformatter.com/cron-expression-generator-quartz.html
+//Seconds	Minutes	    Hours	Day Of Month	Month	Day Of Week	            Year
+//  0	        30	      1	        ?	          *	    MON,TUE,WED,THU,FRI	    *
+
+rule "invia a telegram lo stato caldaia ON"
+when
+    Item SwitchBinary2_Caldaia_Tecnico_ZW22 changed from OFF to ON
+then
+    var riscaldamentomodo = Riscaldamento_Modo.state as Number
+    var tempint = FGMS001_ZW10_Temp.state as Number
+    var setpointauto = Riscaldamento_Auto_SP.state as Number
+    var setpointmanu = Riscaldamento_Man_SP.state as Number
+    sendTelegram("bot1", "Modo: " + riscaldamentomodo + " Termosifoni ON Temp Attuale: " + tempint + " SetPointAuto:" + setpointauto + " SetPointManu:" + setpointmanu )
+end 
+
+rule "invia a telegram lo stato caldaia OFF"
+when
+    Item SwitchBinary2_Caldaia_Tecnico_ZW22 changed from ON to OFF
+then
+    var riscaldamentomodo = Riscaldamento_Modo.state as Number
+    var tempint = FGMS001_ZW10_Temp.state as Number
+    var setpointauto = Riscaldamento_Auto_SP.state as Number
+    var setpointmanu = Riscaldamento_Man_SP.state as Number
+    sendTelegram("bot1", "Modo: " + riscaldamentomodo + " Termosifoni OFF Temp Attuale: " + tempint + " SetPointAuto:" + setpointauto + " SetPointManu:  " + setpointmanu )
+end 
+
+rule "imposta il riscaldamento in auto"
+ when
+     Time cron "0	30	23	?	*	*	*"
+ then
+     Riscaldamento_Modo.sendCommand(1)
+ end

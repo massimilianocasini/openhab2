@@ -1,0 +1,14 @@
+Group gSpeedtest <speedtest>
+Group gSpeedChart
+String SpeedtestCharts
+
+String      SpeedtestSummary        "Speedtest [%s]"                                            <speedtest_summary>   (gSpeedtest, gPersist)
+Number      SpeedtestResultPing     "Ping [%.3f ms]"                                            <speedtest_ping>      (gSpeedtest, gSpeedChart)
+Number      SpeedtestResultDown     "Download [%.2f Mbit/s]"                                    <speedtest_download>  (gSpeedtest, gSpeedChart)
+Number      SpeedtestResultUp       "Upload [%.2f Mbit/s]"                                      <speedtest_upload>    (gSpeedtest, gSpeedChart)
+String      SpeedtestRunning        "Speedtest running ... [%s]"                                  <speedtest_run>       (gSpeedtest)
+Switch      SpeedtestRerun          "Manuale"                                           <speedtest_reload>    (gSpeedtest)
+DateTime    SpeedtestResultDate     "Last Run [%1$td.%1$tm.%1$tY, %1$tH:%1$tM]"   <speedtest_date>      (gSpeedtest, gPersist)
+String      SpeedtestResultError    "Error Message [%s]"                                        <speedtest_error>     (gSpeedtest, gPersist)
+
+String      SpeedtestResultImage    "Immagine"

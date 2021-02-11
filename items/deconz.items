@@ -1,0 +1,46 @@
+Group:Number:AVG    gAvgUmidita      "Umidità [%.1f %%]"
+Group:Dimmer:EQUALITY gIkeaIngressoB "Ingresso Intesità [%d %%]"
+Group:Number:EQUALITY gIkeaIngressoCT "Ingresso Temperatura [%.0f K]"
+
+Group    gTermostatoCameretta    "Temp. Cameretta"   {ga="Thermostat" [ useFahrenheit=false ]}
+Group    gTermostatoSoggiorno    "Temp. Soggiorno"   {ga="Thermostat" [ useFahrenheit=false ]}
+Group     gTermostatoCorridoio    "Temp. Corridoio" {ga="Thermostat" [ useFahrenheit=false ]}
+
+String  Aqara1M "Term. Mode [%s]"    (gTermostatoCameretta, gMapDb)  {ga="thermostatMode"}
+Number    Aqara1S    "SetPoint [%.1f °C]"    (gTermostatoCameretta, gMapDb)    {ga="thermostatTemperatureSetpoint"}
+
+String    Aqara2M    "Term. Mode [%s]"    (gTermostatoSoggiorno, gMapDb)    {ga="thermostatMode"}
+Number    Aqara2S    "SetPoint [%.1f °C]"    (gTermostatoSoggiorno, gMapDb)    {ga="thermostatTemperatureSetpoint"}
+
+String    Lumi1M    "Term. Mode [%s]"    (gTermostatoCorridoio, gMapDb)    {ga="thermostatMode"}
+Number    Lumi1S    "SetPoint [%.1f °C]"    (gTermostatoCorridoio, gMapDb)    {ga="thermostatTemperatureSetpoint"}
+
+Switch    Osram01S    "Presa"    <switch>    (gAll, gSalone, gMapDb) {channel="deconz:onofflight:fcf23eb5:7cb03eaa0a0859f203:switch"}
+
+Number:Temperature      Aqara1T "Cameretta Aqara1T [%.1f °C]"    <temperature>    (gAll, gTemperatura, gAvgTemperatura, gInfluxdb, gTermostatoCameretta)    {ga="thermostatTemperatureAmbient", channel="deconz:temperaturesensor:fcf23eb5:00158d000418a54c010402:temperature"}
+Number:Dimensionless    Aqara1B "Cameretta Aqara1B [%.0f %%]"      <batterylevel>        (gAll, gInfluxdb) {channel="deconz:temperaturesensor:fcf23eb5:00158d000418a54c010402:battery_level"}
+Number:Pressure         Aqara1P "Cameretta Aqara1P [%.1f mbar]"    <pressure>            (gAll, gInfluxdb)   {channel="deconz:pressuresensor:fcf23eb5:00158d000418a54c010403:pressure"}
+Number    Aqara1H "Cameretta Aqara1H [%.1f %%]"    <humidity>    (gAll, gUmidita, gAvgUmidita, gInfluxdb, gTermostatoCameretta)    {ga="thermostatHumidityAmbient", channel="deconz:humiditysensor:fcf23eb5:00158d000418a54c010405:humidity"}
+
+Number:Temperature      Lumi1T    "Corridoio Lumi1T [%.1f °C]"    <temperature>    (gAll, gTemperatura, gAvgTemperatura, gInfluxdb,gTermostatoCorridoio)    {ga="thermostatTemperatureAmbient", channel="deconz:temperaturesensor:fcf23eb5:00158d0003cc6a12010402:temperature"}
+Number:Dimensionless    Lumi1B    "Corridoio Lumi1B [%.0f %%]"       <batterylevel>        (gAll, gInfluxdb)  {channel="deconz:temperaturesensor:fcf23eb5:00158d0003cc6a12010402:battery_level"}
+Number    Lumi1H    "Corridoio Lumi1H [%.1f %%]"    <humidity>    (gAll, gUmidita, gAvgUmidita, gInfluxdb,gTermostatoCorridoio)    {ga="thermostatHumidityAmbient", channel="deconz:humiditysensor:fcf23eb5:00158d0003cc6a12010405:humidity"}
+
+Number:Temperature    Aqara2T    "Soggiorno Aqara2T [%.1f °C]"    <temperature>    (gAll, gTemperatura, gAvgTemperatura, gInfluxdb, gTermostatoSoggiorno)    {ga="thermostatTemperatureAmbient", channel="deconz:temperaturesensor:fcf23eb5:00158d000488a24e010402:temperature"}
+Number:Dimensionless    Aqara2B          "Soggiorno Aqara2B [%.0f %%]"      <batterylevel>        (gAll, gInfluxdb) {channel="deconz:temperaturesensor:fcf23eb5:00158d000488a24e010402:battery_level"}
+Number:Pressure         Aqara2P          "Soggiorno Aqara2P [%.1f mbar]"    <pressure>            (gAll, gInfluxdb)  {channel="deconz:pressuresensor:fcf23eb5:00158d000488a24e010403:pressure"}
+Number    Aqara2H    "Soggiorno Aqara2H [%.1f %%]"    <humidity>    (gAll, gUmidita, gAvgUmidita, gInfluxdb, gTermostatoSoggiorno)    {ga="thermostatHumidityAmbient", channel="deconz:humiditysensor:fcf23eb5:00158d000488a24e010405:humidity"}
+
+//Dimmer IkeaIngressoB "Ingresso Intesità [%d %%]" <light> (gMapDb)
+//Number IkeaIngressoCT "Ingresso Temperatura [%d %%]" <colorlight> (gMapDb)
+Dimmer IkeaLed1B "Ingresso 1 Intensità [%d %%]" <light>  (gMapDb, gIkeaIngressoB) {channel="deconz:colortemperaturelight:fcf23eb5:680ae2fffebe97e701:brightness"}
+Number IkeaLed1CT "Ingresso 1 Temperature [%.0f K]" <colorlight> (gMapDb, gIkeaIngressoCT) {channel="deconz:colortemperaturelight:fcf23eb5:680ae2fffebe97e701:color_temperature"}
+Dimmer IkeaLed2B "Ingresso 2 Intensità [%d %%]" <light> (gMapDb, gIkeaIngressoB) {channel="deconz:colortemperaturelight:fcf23eb5:588e81fffe7882ee01:brightness"}
+Number IkeaLed2CT "Ingresso 2 Temperature [%.0f K]" <colorlight> (gMapDb, gIkeaIngressoCT) {channel="deconz:colortemperaturelight:fcf23eb5:588e81fffe7882ee01:color_temperature"}
+
+Switch WaterSensor1A "Rilevazione acqua" {channel="deconz:waterleakagesensor:fcf23eb5:00158d0005cf0eb2010500:waterleakage"}
+Number:Temperature WaterSensor1T "Temperatura [%.1f °C]" {channel="deconz:waterleakagesensor:fcf23eb5:00158d0005cf0eb2010500:temperature"}
+Number:Dimensionless WaterSensor1B "Batteria [%d %%]" {channel="deconz:waterleakagesensor:fcf23eb5:00158d0005cf0eb2010500:battery_level"}
+DateTime WaterSensor1LastUp "Ultimo invio [%1$td.%1$tm.%1$tY, %1$tH:%1$tM]" {channel="deconz:waterleakagesensor:fcf23eb5:00158d0005cf0eb2010500:last_updated"}
+
+Switch Lumi1_1 "Test []" {channel='deconz:dimmablelight:fcf23eb5:00158d00042855b501:brightness'}
