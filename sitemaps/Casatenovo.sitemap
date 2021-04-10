@@ -66,13 +66,13 @@ sitemap Casatenovo label="Benvenuto a Casa"
 			Switch item=gORDaikinPower  mappings=[ON="ON", OFF="OFF"] 
 			Switch item=gEqualityDaikinMode mappings=["AUTO"="Auto", "DEHUMIDIFIER"="Dehumidifier", "COLD"="Cold", "HEAT"="Heat", "FAN"="Fan"]
 			Switch item=DaikinACUnit_Power_Studio mappings=[ON="ON", OFF="OFF"]
-			Setpoint item=DaikinACUnit_SetPoint_Studio minValue=16 maxValue=30 step=0.5
+			Setpoint item=DaikinACUnit_SetPoint_Studio minValue=18 maxValue=30 step=0.5
 			Switch item=DaikinACUnit_Power_Letto  mappings=[ON="ON", OFF="OFF"]
-			Setpoint item=DaikinACUnit_SetPoint_Letto  minValue=16 maxValue=30 step=0.5
+			Setpoint item=DaikinACUnit_SetPoint_Letto  minValue=18 maxValue=30 step=0.5
 			Switch item=DaikinACUnit_Power_Cameretta  mappings=[ON="ON", OFF="OFF"]
-			Setpoint item=DaikinACUnit_SetPoint_Cameretta minValue=16 maxValue=30 step=0.5
+			Setpoint item=DaikinACUnit_SetPoint_Cameretta minValue=18 maxValue=30 step=0.5
 			Switch item=DaikinACUnit_Power_Salotto mappings=[ON="ON", OFF="OFF"]
-			Setpoint item=DaikinACUnit_SetPoint_Salotto  minValue=16 maxValue=30 step=0.5
+			Setpoint item=DaikinACUnit_SetPoint_Salotto  minValue=18 maxValue=30 step=0.5
 		}
 
 		Text label="Avanzate" icon=climate {
@@ -192,7 +192,7 @@ sitemap Casatenovo label="Benvenuto a Casa"
 	Frame label="Ambienti" {
 		Text label="Giardino" icon="garden" {
 			Default item=BlindsControl_Pergotenda_Giardino_ZW24
-			Switch item=BlindsControl_Pergotenda_Giardino_ZW24  mappings=[0="Chiusa", 100="Aperta"]
+			Switch item=BlindsControl_Pergotenda_Giardino_ZW24  mappings=[0="Aperta", 100="Chiusa"]
 		}
 		Text label="Portone" icon="cellar" {
 			Switch item=SwitchBinary1_Luce_Portone_ZW13 mappings=[ON=ACCESO, OFF=SPENTO]

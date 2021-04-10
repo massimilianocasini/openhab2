@@ -21,7 +21,7 @@ Group gSystemInfo
 Group gUmidita
 Group gMapDb
 
-Group:Number:AVG gAvgTemperatura "Temp.media interna [%.1f °C]" 
+Group:Number:AVG gAvgTemperatura "Temp.media interna [%.1f °C]" <temperature>
 Group:Switch:OR(ON, OFF) gMotion "Stato presenza [MAP(ir.map):%s]"
 
 
