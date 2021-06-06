@@ -39,10 +39,12 @@ Switch Presence "Someone is Present" <presence> // master presence switch, repre
 Switch Presence_Timer { expire="15m,command=OFF" } // anti-flapping timer
 Switch Presence_Auto <switch>  //Presenza automatica o manuale
 
-// //FGWP102 Metered Wall Plug Switch, Cucina
-// Number MeterKwh_Frigorifero_Cucina_ZW3 "Frigorifero Assorbimento totale [%.1f Wh]" <energy> (gInfluxdb) {channel="zwave:device:ba36dd41:node3:meter_kwh"}
-// Number SensorPower_Frigorifero_Cucina_ZW3 "Frigorifero Potenza impegnata [%.1f W]" <energy> (gInfluxdb) {channel="zwave:device:ba36dd41:node3:sensor_power"}
-// Switch SwitchBinary_Frigorifero_Cucina_ZW3 "Frigorifero Stato presa" <switch>     ["Switchable"] {channel="zwave:device:ba36dd41:node3:switch_binary"}
+// //FGWP102 Metered Wall Plug Switch
+Number:Energy FGWP102_003_MeterKwh "Energia consumata" <energy> (gInfluxdb) {channel="zwave:device:ba36dd41:node3:meter_kwh"}
+Number:Power FGWP102_003_ElectricMeter "Potenza istantanea Electricmeter " <energy> (gInfluxdb) {channel="zzwave:device:ba36dd41:node3:meter_watts"}
+Number:Power FGWP102_003_SensorPower "Potenza istantanea " <energy> (gInfluxdb) {channel="zwave:device:ba36dd41:node3:sensor_power"}
+Switch FGWP102_003_SwitchBinary "Wall Plug Stato presa" <switch>     ["Switchable"] {channel="zwave:device:ba36dd41:node3:switch_binary"}
+Switch FGWP102_003_ResetEnergy "Reset energia consumata" <switch> {channel="zwave:device:ba36dd41:node3:meter_reset"}
 
 //FGMS001 Motion Sensor, Studio
 Number:Temperature    FGMS001_ZW10_Temp     "Temperatura Studio[%.1f °C]"    <temperature>    (gAll, gTemperatura, gAvgTemperatura, gStudio, gInfluxdb, gZwave)    {channel="zwave:device:ba36dd41:node10:sensor_temperature"}

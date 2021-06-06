@@ -7,6 +7,9 @@ sitemap Casatenovo label="Benvenuto a Casa"
 		Text item=TempMinMax
 		Switch item=Scena mappings=["0"="NOTTE", "1"="PRESENZA", "2"="USCITA"]
 	//	Switch item=Modalita mappings=["0"="INVERNO", "1"="ESTATE"]
+		Text item=Flussometro
+		// Text item=Counter
+		//Switch item=ResetCounter
 	}
 	Frame label="Stato generale" {
 		Text item=gAvgTemperatura labelcolor=[>25="orange",>15="green",>5="orange",<=5="blue"] valuecolor=[>25="orange",>15="green",>5="orange",<=5="blue"] icon="temperature"
@@ -278,6 +281,13 @@ sitemap Casatenovo label="Benvenuto a Casa"
 				Switch item=SwitchBinary1_LuceLatoLetti_Cameretta_ZW19
 				Switch item=SwitchBinary2_LumettiLatoLetti_Cameretta_ZW19
 			}
+			Text label="WallPlug Switch," icon="cellar" {
+				Default item=FGWP102_003_MeterKwh
+				Default item=FGWP102_003_SensorPower
+				Default item=FGWP102_003_ElectricMeter 
+				Switch item=FGWP102_003_SwitchBinary
+				Switch item=FGWP102_003_ResetEnergy 
+			}
 			Text label="Universal Binary Sensor, Garage" icon="garage" {
 				Default item=SensorBinary1_Serranda_Garage_ZW16
 				Default item=SensorBinary2_IRMotion_Garage_ZW16
@@ -375,7 +385,7 @@ sitemap Casatenovo label="Benvenuto a Casa"
 				Frame label="Statistiche"
 				{
 					Image label="Ultima misurazione" item=SpeedtestResultImage
-					Webview url="/static/chart.html" height=12 icon="speedtest_summary"
+				//	Webview url="/static/chart.html" height=12 icon="speedtest_summary"
 				}
 			}
 	}

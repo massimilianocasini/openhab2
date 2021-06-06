@@ -34,3 +34,18 @@ then
       logInfo("rules", "Prodino Timer creato")
     }
 end
+
+// rule "IR Garage"
+// when
+//     Item FGBS001_16_SensorBinary2  changed from OFF to ON 
+// then
+//  var String receipt = sendPushoverMessage(pushoverBuilder("IR Garage!").withEmergencyPriority())
+
+// // wait for your cancel condition
+
+// if( receipt !== null ) {
+//     cancelPushoverEmergency(receipt)
+//     receipt = null
+// }
+
+// end

@@ -5,11 +5,11 @@ when
     Item gPresence_Sensors changed
 then
     if(Presence_Timer.state == ON && gPresence_Sensors.state == Presence.state ) {
-        logInfo("presence", "Timer is running but group and proxy are the same, cancelling timer")
+      //  logInfo("presence", "Timer is running but group and proxy are the same, cancelling timer")
         Presence_Timer.postUpdate(OFF)
     }
     else if(gPresence_Sensors.state == Presence.state) {
-        logInfo("presence", "No timer and both group and proxy are the same, nothing to do")
+      //  logInfo("presence", "No timer and both group and proxy are the same, nothing to do")
         return;
     }
 

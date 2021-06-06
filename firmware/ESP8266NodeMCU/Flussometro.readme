@@ -1,0 +1,19 @@
+Studio Flussometro
+
+Il flussometro è collegato ad un ESP8266NodeMCU con firmware TASMOTA 9.4
+Il modulo è configurato come Generic(18) con:
+D5 GPIO14 --> Counter (1)
+D0 GPIO16 --> Switch (1)
+
+CounterDebounce 1
+
+Rilevo che impostando il CounterDebounce 1 si ha maggiore linearità nelle misurazioni con i vari tipi di flusso. 
+
+Questi i parametri rilevati per la lettura dell'acqua:
+CounterDebounce 1
+    Flusso MAX                                          Flusso MEDIO                                Flusso MINIMO
+    1L  --> 263 (3.8 ml/giro)                           1L  --> 244 (4.0 ml/giro)                   1L --> 139 (7.1 ml/giro)
+
+Imposto quindi il moltiplicatore a 4 ovvero considero che ogni conteggio corrisponde a circa 4 ml
+
+Lo swicth è collegato all'elettrovalvola dell'acqua.

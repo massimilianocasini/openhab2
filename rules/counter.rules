@@ -1,0 +1,19 @@
+// define global vars at the top of the rules file!
+var int counter = 0
+
+rule "counter"
+when
+    Item Flusso changed from 'in-3-1' to 'in-3-0'
+then
+        counter = counter + 1 
+        Counter.postUpdate(counter)
+
+end
+
+rule "resetCounter"
+when
+    Item ResetCounter changed
+then
+    counter = 0
+    Counter.postUpdate(counter)
+end
